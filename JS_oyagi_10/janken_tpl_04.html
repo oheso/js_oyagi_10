@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" href="css/sample_04.css">
+<title>じゃんけん</title>
+</head>
+<body>
+
+<!-- 
+【実装機能】
+  体力:yes 攻撃強中弱判定:yes 戦後リロード:yes 画像:一部yes 画面変更:yes ステージ:no
+【ゲーム説明】
+  じゃんけんに勝つと相手の体力を減らせる。
+  じぇんけん時に強、中、弱の判定(アイコは強、弱)をし、体力の変動に差が出る。
+  相手の体力がゼロにすると勝ち。
+  最初の質問に回答すると、アイコの際の挙動が変わる。
+      ○ やる気が‥ ⇒ アイコで体力回復
+      ○ 面倒臭っ‥ ⇒ アイコで体力減少 
+-->
+
+  <header>
+    <h1>じゃんけん</h1>
+  </header>
+
+  <main>
+    <div id="question">
+      <p>アイコになったらどう思う？</p>
+      <div class="question_btn">
+        <img src="./img/aiko1.jpg" alt="">
+        <button id="yes_btn" onclick="click_yes()">やる気が<br>沸いてくる！</button>
+        <button id="no_btn" onclick="click_no()">面倒臭っ！<br>と思う。</button>
+        <img src="./img/aiko2.jpg" alt="">
+      </div>
+    </div>
+
+    <div id="janken1">
+      <ul>
+        <li id="gu_btn">グー</li>
+        <li id="cho_btn">チョキ</li>
+        <li id="par_btn">パー</li>
+      </ul>
+      <div><h2>相手の手は <span id="pc_hands">？！？！</span></h2></div>
+      <div id="judgment"><h2>‥‥‥</h2></div>
+      <table>
+        <tr>
+          <th>自分の体力</th>
+          <td id="hp1">200</td>
+        </tr>
+        <tr>
+          <th>相手の体力</th>
+          <td id="hp2">200</td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="janken2">
+      <ul>
+        <li id="gu_btn2">グー</li>
+        <li id="cho_btn2">チョキ</li>
+        <li id="par_btn2">パー</li>
+      </ul>
+      <div><h2>相手の手は <span id="pc_hands2">？！？！</span></h2></div>
+      <div id="judgment2"><h2>‥‥‥</h2></div>
+      <table>
+        <tr>
+          <th>自分の体力</th>
+          <td id="hp1">200</td>
+        </tr>
+        <tr>
+          <th>相手の体力</th>
+          <td id="hp2">200</td>
+        </tr>
+      </table>
+    </div>
+  </main>
+
+  <footer></footer>
+
+  <script>
+    document.getElementById("janken1").style.display ="none";
+    function click_yes(){
+      const janken1 = document.getElementById("janken1")
+      if(janken1.style.display=="none"){
+        janken1.style.display ="block"
+        ,document.getElementById("question").remove();
+      }
+    }
+
+    document.getElementById("janken2").style.display ="none";
+    function click_no(){
+      const janken1 = document.getElementById("janken2")
+      if(janken2.style.display=="none"){
+        janken2.style.display ="block"
+        ,document.getElementById("question").remove();
+      }
+    }
+
+    this.hpcount = {
+      'hp1': 200,
+      'hp2': 200,
+      'hp1_2': 200,
+      'hp2_2': 200,
+    }
+
+// yesバージョン
+
+    $("#gu_btn").on("click",function(){
+        const num = Math.ceil( Math.random() * 3 );
+        if(num==1){
+          const num2 = Math.ceil( Math.random() * 2 );
+            if(num2==1){
+              $("#pc_hands").html("グー");
+              $("#judgment").html("aikoの愛(大) 体力+10");
+              $("#hp1").html(hpcount.hp1+=10);
+            }
+            if(num2==2){
+              $("#pc_hands").html("グー");
+              $("#judgment").html("aikoの愛(小) 体力+5");
+              $("#hp1").html(hpcount.hp1+=5);
+            }
+        }
+        if(num==2){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands").html("チョキ");
+              $("#judgment").html("あなたの攻撃(大) 体力-30");
+              $("#hp2").html(hpcount.hp2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands").html("チョキ");
+              $("#judgment").html("あなたの攻撃(中) 体力-20");
+              $("#hp2").html(hpcount.hp2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands").html("チョキ");
+              $("#judgment").html("あなたの攻撃(小) 体力-10");
+              $("#hp2").html(hpcount.hp2-=10);
+            }
+        }
+        if(num==3){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands").html("パー");
+              $("#judgment").html("相手の攻撃(大) 体力-30");
+              $("#hp1").html(hpcount.hp1-=30);
+            }
+            if(num2==2){
+              $("#pc_hands").html("パー");
+              $("#judgment").html("相手の攻撃(中) 体力-20");
+              $("#hp1").html(hpcount.hp1-=20);
+            }
+            if(num2==3){
+              $("#pc_hands").html("パー");
+              $("#judgment").html("相手の攻撃(小) 体力-10");
+              $("#hp1").html(hpcount.hp1-=10);
+            }
+        }
+        if(hpcount.hp1<=0){
+          if(!alert('あたなの負けです')){window.location.reload();}
+        }
+        if(hpcount.hp2<=0){
+          if(!alert('あたなの勝ちです')){window.location.reload();}
+        }
+    });
+
+    $("#cho_btn").on("click",function(){
+        const num = Math.ceil( Math.random() * 3 );
+        if(num==1){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands").html("グー");
+              $("#judgment").html("相手の攻撃(大) 体力-30");
+              $("#hp1").html(hpcount.hp1-=30);
+            }
+            if(num2==2){
+              $("#pc_hands").html("グー");
+              $("#judgment").html("相手の攻撃(中) 体力-20");
+              $("#hp1").html(hpcount.hp1-=20);
+            }
+            if(num2==3){
+              $("#pc_hands").html("グー");
+              $("#judgment").html("相手の攻撃(小) 体力-10");
+              $("#hp1").html(hpcount.hp1-=10);
+            }
+        }
+        if(num==2){
+          const num2 = Math.ceil( Math.random() * 2 );
+            if(num2==1){
+              $("#pc_hands").html("チョキ");
+              $("#judgment").html("aikoの愛(大) 体力+10");
+              $("#hp1").html(hpcount.hp1+=10);
+            }
+            if(num2==2){
+              $("#pc_hands").html("チョキ");
+              $("#judgment").html("aikoの愛(小) 体力+5");
+              $("#hp1").html(hpcount.hp1+=5);
+            }
+        }
+        if(num==3){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands").html("パー");
+              $("#judgment").html("あなたの攻撃(大) 体力-30");
+              $("#hp2").html(hpcount.hp2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands").html("パー");
+              $("#judgment").html("あなたの攻撃(中) 体力-20");
+              $("#hp2").html(hpcount.hp2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands").html("パー");
+              $("#judgment").html("あなたの攻撃(小) 体力-10");
+              $("#hp2").html(hpcount.hp2-=10);
+            }
+        }
+        if(hpcount.hp1<=0){
+          if(!alert('あたなの負けです')){window.location.reload();}
+        }
+        if(hpcount.hp2<=0){
+          if(!alert('あたなの勝ちです')){window.location.reload();}
+        }
+    });
+    $("#par_btn").on("click",function(){
+        const num = Math.ceil( Math.random() * 3 );
+        if(num==1){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands").html("グー");
+              $("#judgment").html("あなたの攻撃(大) 体力-30");
+              $("#hp2").html(hpcount.hp2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands").html("グー");
+              $("#judgment").html("あなたの攻撃(中) 体力-20");
+              $("#hp2").html(hpcount.hp2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands").html("グー");
+              $("#judgment").html("あなたの攻撃(小) 体力-10");
+              $("#hp2").html(hpcount.hp2-=10);
+            }
+        }
+        if(num==2){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands").html("チョキ");
+              $("#judgment").html("相手の攻撃(大) 体力-30");
+              $("#hp1").html(hpcount.hp1-=30);
+            }
+            if(num2==2){
+              $("#pc_hands").html("チョキ");
+              $("#judgment").html("相手の攻撃(中) 体力-20");
+              $("#hp1").html(hpcount.hp1-=20);
+            }
+            if(num2==3){
+              $("#pc_hands").html("チョキ");
+              $("#judgment").html("相手の攻撃(小) 体力-10");
+              $("#hp1").html(hpcount.hp1-=10);
+            }
+        }
+        if(num==3){
+          const num2 = Math.ceil( Math.random() * 2 );
+            if(num2==1){
+              $("#pc_hands").html("パー");
+              $("#judgment").html("aikoの愛(大) 体力+10");
+              $("#hp1").html(hpcount.hp1+=10);
+            }
+            if(num2==2){
+              $("#pc_hands").html("パー");
+              $("#judgment").html("aikoの愛(小) 体力+5");
+              $("#hp1").html(hpcount.hp1+=5);
+            }
+        }
+        if(hpcount.hp1<=0){
+          if(!alert('あたなの負けです')){window.location.reload();}
+        }
+        if(hpcount.hp2<=0){
+          if(!alert('あたなの勝ちです')){window.location.reload();}
+        }
+    });
+
+// noバージョン
+
+    $("#gu_btn2").on("click",function(){
+        const num = Math.ceil( Math.random() * 3 );
+        if(num==1){
+          const num2 = Math.ceil( Math.random() * 2 );
+            if(num2==1){
+              $("#pc_hands2").html("グー");
+              $("#judgment2").html("aikoへの嫌悪感(大) 体力-10");
+              $("#hp1_2").html(hpcount.hp1_2-=10);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("グー");
+              $("#judgment2").html("aikoへの嫌悪感(小) 体力-5");
+              $("#hp1_2").html(hpcount.hp1_2-=5);
+            }
+        }
+        if(num==2){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands2").html("チョキ");
+              $("#judgment2").html("あなたの攻撃(大) 体力-30");
+              $("#hp2_2").html(hpcount.hp2_2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("チョキ");
+              $("#judgment2").html("あなたの攻撃(中) 体力-20");
+              $("#hp2_2").html(hpcount.hp2_2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands2").html("チョキ");
+              $("#judgment2").html("あなたの攻撃(小) 体力-10");
+              $("#hp2_2").html(hpcount.hp2_2-=10);
+            }
+        }
+        if(num==3){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands2").html("パー");
+              $("#judgment2").html("相手の攻撃(大) 体力-30");
+              $("#hp1_2").html(hpcount.hp1_2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("パー");
+              $("#judgment2").html("相手の攻撃(中) 体力-20");
+              $("#hp1_2").html(hpcount.hp1_2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands2").html("パー");
+              $("#judgment2").html("相手の攻撃(小) 体力-10");
+              $("#hp1_2").html(hpcount.hp1_2-=10);
+            }
+        }
+        if(hpcount.hp1_2<=0){
+          if(!alert('あたなの負けです')){window.location.reload();}
+        }
+        if(hpcount.hp2_2<=0){
+          if(!alert('あたなの勝ちです')){window.location.reload();}
+        }
+    });
+
+    $("#cho_btn2").on("click",function(){
+        const num = Math.ceil( Math.random() * 3 );
+        if(num==1){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands2").html("グー");
+              $("#judgment2").html("相手の攻撃(大) 体力-30");
+              $("#hp1_2").html(hpcount.hp1_2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("グー");
+              $("#judgment2").html("相手の攻撃(中) 体力-20");
+              $("#hp1_2").html(hpcount.hp1_2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands2").html("グー");
+              $("#judgment2").html("相手の攻撃(小) 体力-10");
+              $("#hp1_2").html(hpcount.hp1_2-=10);
+            }
+        }
+        if(num==2){
+          const num2 = Math.ceil( Math.random() * 2 );
+            if(num2==1){
+              $("#pc_hands2").html("チョキ");
+              $("#judgment2").html("aikoへの嫌悪感(大) 体力-10");
+              $("#hp1_2").html(hpcount.hp1_2-=10);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("チョキ");
+              $("#judgment2").html("aikoへの嫌悪感(小) 体力-5");
+              $("#hp1_2").html(hpcount.hp1_2-=5);
+            }
+        }
+        if(num==3){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands2").html("パー");
+              $("#judgment2").html("あなたの攻撃(大) 体力-30");
+              $("#hp2_2").html(hpcount.hp2_2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("パー");
+              $("#judgment2").html("あなたの攻撃(中) 体力-20");
+              $("#hp2_2").html(hpcount.hp2_2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands2").html("パー");
+              $("#judgment2").html("あなたの攻撃(小) 体力-10");
+              $("#hp2_2").html(hpcount.hp2_2-=10);
+            }
+        }
+        if(hpcount.hp1_2<=0){
+          if(!alert('あたなの負けです')){window.location.reload();}
+        }
+        if(hpcount.hp2_2<=0){
+          if(!alert('あたなの勝ちです')){window.location.reload();}
+        }
+    });
+    $("#par_btn2").on("click",function(){
+        const num = Math.ceil( Math.random() * 3 );
+        if(num==1){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands2").html("グー");
+              $("#judgment2").html("あなたの攻撃(大) 体力-30");
+              $("#hp2_2").html(hpcount.hp2_2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("グー");
+              $("#judgment2").html("あなたの攻撃(中) 体力-20");
+              $("#hp2_2").html(hpcount.hp2_2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands2").html("グー");
+              $("#judgment2").html("あなたの攻撃(小) 体力-10");
+              $("#hp2_2").html(hpcount.hp2_2-=10);
+            }
+        }
+        if(num==2){
+          const num2 = Math.ceil( Math.random() * 3 );
+            if(num2==1){
+              $("#pc_hands2").html("チョキ");
+              $("#judgment2").html("相手の攻撃(大) 体力-30");
+              $("#hp1_2").html(hpcount.hp1_2-=30);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("チョキ");
+              $("#judgment2").html("相手の攻撃(中) 体力-20");
+              $("#hp1_2").html(hpcount.hp1_2-=20);
+            }
+            if(num2==3){
+              $("#pc_hands2").html("チョキ");
+              $("#judgment2").html("相手の攻撃(小) 体力-10");
+              $("#hp1_2").html(hpcount.hp1_2-=10);
+            }
+        }
+        if(num==3){
+          const num2 = Math.ceil( Math.random() * 2 );
+            if(num2==1){
+              $("#pc_hands2").html("パー");
+              $("#judgment2").html("aikoへの嫌悪感(大) 体力-10");
+              $("#hp1_2").html(hpcount.hp1_2-=10);
+            }
+            if(num2==2){
+              $("#pc_hands2").html("パー");
+              $("#judgment2").html("aikoへの嫌悪感(小) 体力-5");
+              $("#hp1_2").html(hpcount.hp1_2-=5);
+            }
+        }
+        if(hpcount.hp1_2<=0){
+          if(!alert('あたなの負けです')){window.location.reload();}
+        }
+        if(hpcount.hp2_2<=0){
+          if(!alert('あたなの勝ちです')){window.location.reload();}
+        }
+    });
+  </script>
+</body>
+</html>
